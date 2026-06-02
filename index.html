@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>하이퍼 캔버스 포스터 스튜디오</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Gamja+Flower&family=Gowun+Batang:wght=700&family=Noto+Sans+KR:wght@500;700&family=Nanum+Gothic:wght@800&family=East+Sea+Dokdo&family=Song+Myung&family=Yeon+Sung&family=Jua&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f5f6fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1250px;
+            width: 100%;
+            display: flex;
+            gap: 25px;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+        }
+        .control-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+        .preview-panel {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            background: #edf2f7;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        h2 { margin-top: 0; color: #2d3748; border-bottom: 2px solid #edf2f7; padding-bottom: 10px; }
+        h3 { margin: 5px 0; font-size: 14px; color: #3182ce; font-weight: bold; }
+        .section-box {
+            background: #f7fafc;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 8px;
+        }
+        .row-group { display: flex; gap: 10px; }
+        .row-group .input-group { flex: 1; }
+        label { font-weight: bold; color: #4a5568; font-size: 13px; }
+        input, textarea, select {
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            background: #fff;
+        }
+        input[type="range"] { padding: 0; cursor: pointer; }
+        input[type="color"] { padding: 2px; height: 40px; cursor: pointer; width: 100%; }
+        
+        .file-upload-btn, .action-btn {
+            padding: 10px;
+            background-color: #ebf8ff;
+            border: 2px dashed #63b3ed;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            color: #2b6cb0;
+            margin-top: 5px;
+            display: block;
+            unselectable: none;
+        }
+        .action-btn {
+            background-color: #e2e8f0;
+            border: 1px solid #cbd5e0;
+            color: #4a5568;
+        }
+        .action-btn:hover { background-color: #cbd5e0; }
+        
+        .main-btn {
+            padding: 15px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .main-btn:hover { background-color: #27ae60; }
+        
+        canvas {
+            max-width: 100%;
+            max-height: 580px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            background-color: #fff;
+        }
+        .delete-btn {
+            background-color: #e53e3e;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .delete-btn:hover { background-color: #c53030; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="control-panel">
+        <h2>🎨 무제한 캔버스 스튜디오</h2>
+        
+        <div class="section-box">
+            <h3>🖼️ 1. 배경 이미지</h3>
+            <div class="input-group">
+                <select id="theme" onchange="handleThemeChange()">
+                    <option value="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=800&q=80">🎉 파티 / 축제</option>
+                    <option value="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80">🛍️ 세일 / 할인</option>
+                    <option value="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80">☕ 카페 / 디저트</option>
+                    <option value="https://images.unsplash.com/photo-1557683316-973673baf926?w=800&q=80">🎨 그라데이션</option>
+                    <option value="custom">[내 이미지 직접 업로드 ↑]</option>
+                </select>
+                <label for="imageLoader" class="file-upload-btn" id="uploadBtnLabel" style="display:none;">📁 배경 사진 선택</label>
+                <input type="file" id="imageLoader" accept="image/*" style="display:none;" onchange="handleFileUpload(event)">
+            </div>
+            <div class="input-group">
+                <label for="overlayOpacity">배경 어둡기 필터</label>
+                <input type="range" id="overlayOpacity" min="0" max="0.9" step="0.05" value="0.3" oninput="updatePoster()">
+            </div>
+        </div>
+
+        <div class="section-box">
+            <h3>➕ 요소 추가하기</h3>
+            <div class="row-group">
+                <button class="action-btn" style="flex:1;" onclick="addTextLayer()">🔤 글자 추가</button>
+                <label for="stickerLoader" class="action-btn" style="flex:1; margin-top:5px;">📷 사진 추가</label>
+                <input type="file" id="stickerLoader" accept="image/*" style="display:none;" onchange="handleStickerUpload(event)">
+            </div>
+        </div>
+
+        <div class="section-box" id="propertyEditor" style="display:none;">
+            <h3 id="propTitle">📝 선택한 요소 편집</h3>
+            
+            <div id="textOptions" style="display:none;">
+                <div class="input-group">
+                    <label>문구 내용</label>
+                    <textarea id="propTextContent" rows="3" oninput="onPropertyChange()"></textarea>
+                </div>
+                <div class="input-group">
+                    <label>폰트 스타일</label>
+                    <select id="propTextFont" onchange="onPropertyChange()">
+                        <option value="'Black Han Sans', sans-serif">배민 한나체 (두꺼움)</option>
+                        <option value="'Do Hyeon', sans-serif">배민 도현체 (꽉참)</option>
+                        <option value="'Jua', sans-serif">배민 주아체 (둥글)</option>
+                        <option value="'Noto Sans KR', sans-serif">본고딕 (깔끔)</option>
+                        <option value="'Gowun Batang', serif">고운바탕 (명조)</option>
+                        <option value="'Song Myung', serif">송명체 (날카로운 명조)</option>
+                        <option value="'Yeon Sung', cursive">연성체 (붓글씨)</option>
+                        <option value="'Gamja Flower', cursive">감자꽃체 (귀엽)</option>
+                        <option value="'East Sea Dokdo', cursive">독도체 (강렬)</option>
+                    </select>
+                </div>
+                <div class="row-group">
+                    <div class="input-group"><label>크기</label><input type="number" id="propTextSize" oninput="onPropertyChange()"></div>
+                    <div class="input-group" style="flex:0.6;"><label>색상</label><input type="color" id="propTextColor" onchange="onPropertyChange()"></div>
+                </div>
+            </div>
+
+            <div id="imageOptions" style="display:none;">
+                <span style="font-size:12px; color:#718096;">선택한 사진은 마우스 모서리 점을 드래그하여 크기를 바꿀 수 있습니다.</span>
+            </div>
+
+            <button class="delete-btn" style="width:100%;" onclick="deleteSelectedLayer()">선택 요소 삭제 ❌</button>
+        </div>
+    </div>
+
+    <div class="preview-panel">
+        <div style="font-size:12px; font-weight: bold; color: #4a5568; margin-bottom: 15px; align-self: flex-start;">💡 캔버스 위 글자나 사진을 클릭하여 움직이고 수정해보세요!</div>
+        <canvas id="posterCanvas" width="800" height="1200"></canvas>
+        <button class="main-btn" onclick="downloadPoster()">포스터 완성 및 다운로드 💾</button>
+    </div>
+</div>
+
+<script>
+    let currentBgImg = new Image();
+    let layers = [];         // 텍스트와 이미지 레이어를 통합 관리하는 배열
+    let selectedLayer = null; 
+    let isDragging = false;
+    let isResizing = false;   
+    let dragStartX = 0, dragStartY = 0;
+    let initialScaleOrSize = 1.0;   
+
+    const HANDLE_SIZE = 16;   
+    const canvas = document.getElementById('posterCanvas');
+    const ctx = canvas.getContext('2d');
+
+    window.onload = function() {
+        loadBgImage(document.getElementById('theme').value);
+        // 기본 샘플 문구 레이어 추가
+        layers.push({ id: 1, type: 'text', text: '여름맞이 대축제', x: 400, y: 300, size: 75, font: "'Black Han Sans', sans-serif", color: '#FFFFFF' });
+        layers.push({ id: 2, type: 'text', text: '시원한 음료 1+1 이벤트\n지금 매장으로 방문하세요!', x: 400, y: 950, size: 38, font: "'Noto Sans KR', sans-serif", color: '#FFD700' });
+        
+        initCanvasEvents(); 
+    };
+
+    function handleThemeChange() {
+        const themeSelect = document.getElementById('theme');
+        const uploadLabel = document.getElementById('uploadBtnLabel');
+        if (themeSelect.value === 'custom') {
+            uploadLabel.style.display = 'block';
+        } else {
+            uploadLabel.style.display = 'none';
+            loadBgImage(themeSelect.value);
+        }
+    }
+
+    function loadBgImage(url) {
+        currentBgImg = new Image();
+        currentBgImg.crossOrigin = "Anonymous";
+        currentBgImg.src = url;
+        currentBgImg.onload = updatePoster;
+    }
+
+    function handleFileUpload(e) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            currentBgImg = new Image();
+            currentBgImg.src = event.target.result;
+            currentBgImg.onload = updatePoster;
+        }
+        reader.readAsDataURL(e.target.files[0]);
+    }
+
+    // --- 레이어 추가 로직 ---
+    function addTextLayer() {
+        const newText = {
+            id: Date.now(),
+            type: 'text',
+            text: '새로운 홍보 문구',
+            x: 400,
+            y: 600,
+            size: 40,
+            font: "'Noto Sans KR', sans-serif",
+            color: '#FFFFFF'
+        };
+        layers.push(newText);
+        selectedLayer = newText;
+        showPropertyEditor();
+        updatePoster();
+    }
+
+    function handleStickerUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = function() {
+                const newImg = {
+                    id: Date.now(),
+                    type: 'image',
+                    img: img,
+                    x: 400, 
+                    y: 600,
+                    scale: 0.5, 
+                    width: img.width,
+                    height: img.height
+                };
+                layers.push(newImg);
+                selectedLayer = newImg;
+                showPropertyEditor();
+                updatePoster();
+            };
+        }
+        reader.readAsDataURL(file);
+        e.target.value = ''; 
+    }
+
+    // --- 동적 속성 창 바인딩 ---
+    function showPropertyEditor() {
+        const editor = document.getElementById('propertyEditor');
+        const textOpts = document.getElementById('textOptions');
+        const imgOpts = document.getElementById('imageOptions');
+        
+        if (!selectedLayer) {
+            editor.style.display = 'none';
+            return;
+        }
+        
+        editor.style.display = 'block';
+        if (selectedLayer.type === 'text') {
+            textOpts.style.display = 'block';
+            imgOpts.style.display = 'none';
+            document.getElementById('propTitle').innerText = '🔤 글자 속성 편집';
+            document.getElementById('propTextContent').value = selectedLayer.text;
+            document.getElementById('propTextFont').value = selectedLayer.font;
+            document.getElementById('propTextSize').value = selectedLayer.size;
+            document.getElementById('propTextColor').value = selectedLayer.color;
+        } else {
+            textOpts.style.display = 'none';
+            imgOpts.style.display = 'block';
+            document.getElementById('propTitle').innerText = '🖼️ 사진 속성 편집';
+        }
+    }
+
+    function onPropertyChange() {
+        if (!selectedLayer || selectedLayer.type !== 'text') return;
+        selectedLayer.text = document.getElementById('propTextContent').value;
+        selectedLayer.font = document.getElementById('propTextFont').value;
+        selectedLayer.size = parseInt(document.getElementById('propTextSize').value) || 20;
+        selectedLayer.color = document.getElementById('propTextColor').value;
+        updatePoster();
+    }
+
+    function deleteSelectedLayer() {
+        if (!selectedLayer) return;
+        layers = layers.filter(l => l.id !== selectedLayer.id);
+        selectedLayer = null;
+        showPropertyEditor();
+        updatePoster();
+    }
+
+    // --- 인터랙티브 마우스 엔진 (충돌 연산 통합) ---
+    function initCanvasEvents() {
+        canvas.addEventListener('mousedown', onStart);
+        canvas.addEventListener('mousemove', onMove);
+        canvas.addEventListener('mouseup', onEnd);
+        canvas.addEventListener('mouseleave', onEnd);
+        canvas.addEventListener('touchstart', onStart, { passive: false });
+        canvas.addEventListener('touchmove', onMove, { passive: false });
+        canvas.addEventListener('touchend', onEnd);
+    }
+
+    function getCanvasCoords(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+            x: (clientX - rect.left) * (canvas.width / rect.width),
+            y: (clientY - rect.top) * (canvas.height / rect.height)
+        };
+    }
+
+    // 레이어 각각의 히트박스(영역) 구하기 유틸
+    function getLayerBounds(layer) {
+        if (layer.type === 'image') {
+            const w = layer.width * layer.scale;
+            const h = layer.height * layer.scale;
+            return { x1: layer.x - w/2, x2: layer.x + w/2, y1: layer.y - h/2, y2: layer.y + h/2, w: w, h: h };
+        } else {
+            // 텍스트의 가상 바운딩 박스 계산 (줄바꿈 고려)
+            ctx.font = `bold ${layer.size}px ${layer.font}`;
+            const lines = layer.text.split('\n');
+            let maxW = 0;
+            lines.forEach(l => { maxW = Math.max(maxW, ctx.measureText(l).width); });
+            const h = lines.length * layer.size * 1.2;
+            return { x1: layer.x - maxW/2, x2: layer.x + maxW/2, y1: layer.y - layer.size, y2: layer.y + h - layer.size, w: maxW, h: h };
+        }
+    }
+
+    function onStart(e) {
+        if(e.touches) e.preventDefault();
+        const coords = getCanvasCoords(e);
+        
+        // 1. 선택 레이어 크기 조절 우측 하단 핸들 체크
+        if (selectedLayer) {
+            const b = getLayerBounds(selectedLayer);
+            if (coords.x >= b.x2 - HANDLE_SIZE && coords.x <= b.x2 + HANDLE_SIZE &&
+                coords.y >= b.y2 - HANDLE_SIZE && coords.y <= b.y2 + HANDLE_SIZE) {
+                isResizing = true;
+                dragStartX = coords.x;
+                initialScaleOrSize = selectedLayer.type === 'image' ? selectedLayer.scale : selectedLayer.size;
+                return;
+            }
+        }
+
+        // 2. 몸통 클릭 감지 (역순 탐색으로 맨 위 레이어 우선 선택)
+        let hit = false;
+        for (let i = layers.length - 1; i >= 0; i--) {
+            const layer = layers[i];
+            const b = getLayerBounds(layer);
+            
+            if (coords.x >= b.x1 && coords.x <= b.x2 && coords.y >= b.y1 && coords.y <= b.y2) {
+                selectedLayer = layer;
+                isDragging = true;
+                dragStartX = coords.x - layer.x;
+                dragStartY = coords.y - layer.y;
+                hit = true;
+                break;
+            }
+        }
+
+        if (!hit && !isResizing) selectedLayer = null;
+        showPropertyEditor();
+        updatePoster();
+    }
+
+    function onMove(e) {
+        if(e.touches) e.preventDefault();
+        const coords = getCanvasCoords(e);
+
+        // 크기조절 커서 변경 안내
+        if (!isDragging && !isResizing && selectedLayer) {
+            const b = getLayerBounds(selectedLayer);
+            if (coords.x >= b.x2 - HANDLE_SIZE && coords.x <= b.x2 + HANDLE_SIZE &&
+                coords.y >= b.y2 - HANDLE_SIZE && coords.y <= b.y2 + HANDLE_SIZE) {
+                canvas.style.cursor = 'se-resize';
+            } else {
+                canvas.style.cursor = 'move';
+            }
+        }
+
+        if (isResizing && selectedLayer) {
+            const deltaX = coords.x - dragStartX;
+            if (selectedLayer.type === 'image') {
+                const newScale = initialScaleOrSize + (deltaX / (selectedLayer.width / 2));
+                selectedLayer.scale = Math.max(0.05, Math.min(2.0, newScale));
+            } else {
+                // 글자 크기도 마우스 드래그로 즉시 스케일링 가능!
+                const newSize = initialScaleOrSize + (deltaX * 0.3);
+                selectedLayer.size = Math.max(12, Math.min(150, Math.round(newSize)));
+                document.getElementById('propTextSize').value = selectedLayer.size;
+            }
+            updatePoster();
+        } else if (isDragging && selectedLayer) {
+            selectedLayer.x = coords.x - dragStartX;
+            selectedLayer.y = coords.y - dragStartY;
+            updatePoster();
+        }
+    }
+
+    function onEnd() { isDragging = false; isResizing = false; }
+
+    // --- 그래픽 최종 드로잉 렌더 룸 ---
+    function updatePoster() {
+        if (!currentBgImg.src) return;
+        const opacity = document.getElementById('overlayOpacity').value;
+
+        // 1. 도화지 초기화 및 배경
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(currentBgImg, 0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = `rgba(0, 0, 0, ${opacity})`; 
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // 2. 모든 레이어 순서대로 순회 그리기
+        layers.forEach(layer => {
+            ctx.save();
+            ctx.textAlign = "center";
+            ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+            ctx.shadowBlur = 10;
+
+            if (layer.type === 'image') {
+                const w = layer.width * layer.scale;
+                const h = layer.height * layer.scale;
+                ctx.drawImage(layer.img, layer.x - w/2, layer.y - h/2, w, h);
+            } else {
+                ctx.fillStyle = layer.color;
+                ctx.font = `bold ${layer.size}px ${layer.font}`;
+                const lines = layer.text.split('\n');
+                lines.forEach((line, index) => {
+                    ctx.fillText(line, layer.x, layer.y + (index * layer.size * 1.2));
+                });
+            }
+
+            // 선택된 객체 하이라이트 가이드 및 조절 핸들 점 찍기
+            if (selectedLayer && selectedLayer.id === layer.id) {
+                const b = getLayerBounds(layer);
+                ctx.strokeStyle = '#3182ce';
+                ctx.lineWidth = 3;
+                ctx.shadowBlur = 0; // 바운딩 박스엔 그림자 해제
+                ctx.strokeRect(b.x1, b.y1, b.w, b.h);
+
+                ctx.fillStyle = '#3182ce';
+                ctx.beginPath();
+                ctx.arc(b.x2, b.y2, HANDLE_SIZE/2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.restore();
+        });
+    }
+
+    function downloadPoster() {
+        const prevSelected = selectedLayer;
+        selectedSticker = null;
+        selectedLayer = null; // 가이드라인 숨기기
+        updatePoster();
+
+        setTimeout(() => {
+            const link = document.createElement('a');
+            link.download = 'perfect-canvas-poster.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            selectedLayer = prevSelected;
+            updatePoster();
+        }, 50);
+    }
+</script>
+
+</body>
+</html>
