@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>하이퍼 캔버스 포스터 스튜디오</title>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Gamja+Flower&family=Gowun+Batang:wght=700&family=Noto+Sans+KR:wght@500;700&family=Nanum+Gothic:wght@800&family=East+Sea+Dokdo&family=Song+Myung&family=Yeon+Sung&family=Jua&display=swap" rel="stylesheet">
-    
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Aggro&family=Black+Han+Sans&family=Cafe24Anemone&family=Do+Hyeon&family=East+Sea+Dokdo&family=Gamja+Flower&family=Gowun+Batang:wght@700&family=Jua&family=Nanum+Square&family=Noto+Sans+KR:wght@500;700&display=swap');
+
         body {
             font-family: 'Noto Sans KR', sans-serif;
             background-color: #f5f6fa;
@@ -89,7 +87,7 @@
             color: #2b6cb0;
             margin-top: 5px;
             display: block;
-            unselectable: none;
+            user-select: none;
         }
         .action-btn {
             background-color: #e2e8f0;
@@ -98,6 +96,18 @@
         }
         .action-btn:hover { background-color: #cbd5e0; }
         
+        /* 아이들이 누르기 좋은 스티커 버튼 스타일 */
+        .sticker-preset-btn {
+            padding: 8px;
+            font-size: 20px;
+            background: white;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .sticker-preset-btn:hover { transform: scale(1.1); background: #f7fafc; }
+
         .main-btn {
             padding: 15px;
             background-color: #2ecc71;
@@ -162,13 +172,39 @@
             <h3>➕ 요소 추가하기</h3>
             <div class="row-group">
                 <button class="action-btn" style="flex:1;" onclick="addTextLayer()">🔤 글자 추가</button>
-                <label for="stickerLoader" class="action-btn" style="flex:1; margin-top:5px;">📷 사진 추가</label>
+                <label for="stickerLoader" class="action-btn" style="flex:1; margin-top:5px;">📷 컴퓨터 사진 추가</label>
                 <input type="file" id="stickerLoader" accept="image/*" style="display:none;" onchange="handleStickerUpload(event)">
+            </div>
+            
+            <div class="input-group" style="margin-top: 10px;">
+                <label>⭐ 귀여운 스티커 쏙 넣기</label>
+                <div class="row-group" style="flex-wrap: wrap; gap: 6px; margin-top: 4px;">
+                    <button class="sticker-preset-btn" onclick="addEmojiSticker('❤️')">❤️</button>
+                    <button class="sticker-preset-btn" onclick="addEmojiSticker('✨')">✨</button>
+                    <button class="sticker-preset-btn" onclick="addEmojiSticker('🎉')">🎉</button>
+                    <button class="sticker-preset-btn" onclick="addEmojiSticker('☕')">☕</button>
+                    <button class="sticker-preset-btn" onclick="addEmojiSticker('🛍️')">🛍️</button>
+                    <button class="sticker-preset-btn" onclick="addEmojiSticker('🔥')">🔥</button>
+                </div>
+            </div>
+
+            <div class="input-group" style="margin-top: 8px;">
+                <label>🔷 기본 도형 넣기</label>
+                <div class="row-group" style="gap: 6px; margin-top: 4px;">
+                    <button class="action-btn" style="flex:1; font-size:12px; padding:6px;" onclick="addShapeLayer('circle')">🟡 동그라미</button>
+                    <button class="action-btn" style="flex:1; font-size:12px; padding:6px;" onclick="addShapeLayer('rect')">🟦 네모</button>
+                    <button class="action-btn" style="flex:1; font-size:12px; padding:6px;" onclick="addShapeLayer('bubble')">💬 말풍선</button>
+                </div>
             </div>
         </div>
 
         <div class="section-box" id="propertyEditor" style="display:none;">
             <h3 id="propTitle">📝 선택한 요소 편집</h3>
+            
+            <div class="row-group" style="margin-bottom: 12px; border-bottom: 1px dashed #cbd5e0; padding-bottom: 10px;">
+                <button class="action-btn" style="flex:1; background:#fff;" onclick="moveLayerOrder('forward')">🔼 맨 앞으로 보내기</button>
+                <button class="action-btn" style="flex:1; background:#fff;" onclick="moveLayerOrder('backward')">🔽 맨 뒤로 보내기</button>
+            </div>
             
             <div id="textOptions" style="display:none;">
                 <div class="input-group">
@@ -180,23 +216,47 @@
                     <select id="propTextFont" onchange="onPropertyChange()">
                         <option value="'Black Han Sans', sans-serif">배민 한나체 (두꺼움)</option>
                         <option value="'Do Hyeon', sans-serif">배민 도현체 (꽉참)</option>
-                        <option value="'Jua', sans-serif">배민 주아체 (둥글)</option>
-                        <option value="'Noto Sans KR', sans-serif">본고딕 (깔끔)</option>
-                        <option value="'Gowun Batang', serif">고운바탕 (명조)</option>
-                        <option value="'Song Myung', serif">송명체 (날카로운 명조)</option>
-                        <option value="'Yeon Sung', cursive">연성체 (붓글씨)</option>
-                        <option value="'Gamja Flower', cursive">감자꽃체 (귀엽)</option>
-                        <option value="'East Sea Dokdo', cursive">독도체 (강렬)</option>
+                        <option value="'Jua', sans-serif">배민 주아체 (둥글둥글)</option>
+                        <option value="'Noto Sans KR', sans-serif">본고딕 (깔끔·기본)</option>
+                        <option value="'Gowun Batang', serif">고운바탕 (부드러운 명조)</option>
+                        <option value="'Yeon Sung', cursive">연성체 (자연스러운 붓글씨)</option>
+                        <option value="'East Sea Dokdo', cursive">독도체 (거친 거인 느낌)</option>
+                        <option value="'Nanum Square', sans-serif">나눔스퀘어 (바른 고딕)</option>
+                        <option value="'Cafe24Anemone', cursive">아네모네체 (손글씨 감성)</option>
+                        <option value="'Aggro', sans-serif">샌드박스 어그로체 (주목도 최고)</option>
                     </select>
                 </div>
                 <div class="row-group">
                     <div class="input-group"><label>크기</label><input type="number" id="propTextSize" oninput="onPropertyChange()"></div>
                     <div class="input-group" style="flex:0.6;"><label>색상</label><input type="color" id="propTextColor" onchange="onPropertyChange()"></div>
                 </div>
+                <div class="row-group" style="margin-top:8px; background:#edf2f7; padding:8px; border-radius:6px; align-items:center;">
+                    <div style="display:flex; align-items:center; gap:4px; flex:1;">
+                        <input type="checkbox" id="propTextStroke" onchange="onPropertyChange()" style="cursor:pointer;">
+                        <label for="propTextStroke" style="cursor:pointer;">글자 테두리 켜기</label>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:4px; flex:0.8;">
+                        <label style="font-size:11px;">선 색</label>
+                        <input type="color" id="propTextStrokeColor" value="#000000" onchange="onPropertyChange()" style="height:30px;">
+                    </div>
+                </div>
             </div>
 
             <div id="imageOptions" style="display:none;">
-                <span style="font-size:12px; color:#718096;">선택한 사진은 마우스 모서리 점을 드래그하여 크기를 바꿀 수 있습니다.</span>
+                <div class="input-group" id="shapeColorGroup" style="display:none;">
+                    <label>도형 채우기 색상</label>
+                    <input type="color" id="propShapeColor" value="#ffcc00" onchange="onPropertyChange()">
+                </div>
+                <span style="font-size:12px; color:#718096;">선택한 요소는 마우스 모서리 점을 드래그하여 크기를 바꿀 수 있습니다.</span>
+            </div>
+
+            <div class="input-group" style="margin-top:10px; border-top:1px solid #e2e8f0; padding-top:10px;">
+                <label>💫 회전 제어</label>
+                <div class="row-group" style="align-items:center;">
+                    <input type="range" id="propRotation" min="0" max="359" step="1" value="0" style="flex:1;" oninput="onRotationSliderChange(this.value)">
+                    <input type="number" id="propRotationNumber" min="0" max="359" step="1" value="0" style="flex:0.3; padding:5px; text-align:center;" oninput="onRotationSliderChange(this.value)">
+                    <span style="font-size:12px; font-weight:bold; color:#4a5568;">°</span>
+                </div>
             </div>
 
             <button class="delete-btn" style="width:100%;" onclick="deleteSelectedLayer()">선택 요소 삭제 ❌</button>
@@ -204,7 +264,9 @@
     </div>
 
     <div class="preview-panel">
-        <div style="font-size:12px; font-weight: bold; color: #4a5568; margin-bottom: 15px; align-self: flex-start;">💡 캔버스 위 글자나 사진을 클릭하여 움직이고 수정해보세요!</div>
+        <div style="font-size:12px; font-weight: bold; color: #4a5568; margin-bottom: 15px; align-self: flex-start;">
+            💡 요소 변형 꿀팁: 몸통 드래그(=이동) / 우하단 파란 점(=크기) / 상단 중앙 초록 점(=회전)
+        </div>
         <canvas id="posterCanvas" width="800" height="1200"></canvas>
         <button class="main-btn" onclick="downloadPoster()">포스터 완성 및 다운로드 💾</button>
     </div>
@@ -212,23 +274,28 @@
 
 <script>
     let currentBgImg = new Image();
-    let layers = [];         // 텍스트와 이미지 레이어를 통합 관리하는 배열
+    let layers = [];         
     let selectedLayer = null; 
+    
     let isDragging = false;
-    let isResizing = false;   
-    let dragStartX = 0, dragStartY = 0;
-    let initialScaleOrSize = 1.0;   
+    let isResizing = false;       
+    let isRotating = false; 
 
-    const HANDLE_SIZE = 16;   
+    let dragOffsetX = 0, dragOffsetY = 0;
+    let initialScaleOrSize = 1.0;       
+    let initialAngle = 0; 
+    let startMouseAngle = 0;
+
+    const HANDLE_SIZE = 16;       
+    const ROTATE_HANDLE_OFFSET = 40; 
+
     const canvas = document.getElementById('posterCanvas');
     const ctx = canvas.getContext('2d');
 
     window.onload = function() {
         loadBgImage(document.getElementById('theme').value);
-        // 기본 샘플 문구 레이어 추가
-        layers.push({ id: 1, type: 'text', text: '여름맞이 대축제', x: 400, y: 300, size: 75, font: "'Black Han Sans', sans-serif", color: '#FFFFFF' });
-        layers.push({ id: 2, type: 'text', text: '시원한 음료 1+1 이벤트\n지금 매장으로 방문하세요!', x: 400, y: 950, size: 38, font: "'Noto Sans KR', sans-serif", color: '#FFD700' });
-        
+        layers.push({ id: 1, type: 'text', text: '여름맞이 대축제', x: 400, y: 300, size: 75, font: "'Black Han Sans', sans-serif", color: '#FFFFFF', angle: 0, useStroke: true, strokeColor: '#000000' });
+        layers.push({ id: 2, type: 'text', text: '시원한 음료 1+1 이벤트\n지금 매장으로 방문하세요!', x: 400, y: 950, size: 38, font: "'Noto Sans KR', sans-serif", color: '#FFD700', angle: 0, useStroke: true, strokeColor: '#000000' });
         initCanvasEvents(); 
     };
 
@@ -245,7 +312,7 @@
 
     function loadBgImage(url) {
         currentBgImg = new Image();
-        currentBgImg.crossOrigin = "Anonymous";
+        if(url.startsWith('http')) currentBgImg.crossOrigin = "Anonymous";
         currentBgImg.src = url;
         currentBgImg.onload = updatePoster;
     }
@@ -260,20 +327,54 @@
         reader.readAsDataURL(e.target.files[0]);
     }
 
-    // --- 레이어 추가 로직 ---
     function addTextLayer() {
         const newText = {
             id: Date.now(),
             type: 'text',
             text: '새로운 홍보 문구',
-            x: 400,
-            y: 600,
-            size: 40,
+            x: 400, y: 600, size: 40,
             font: "'Noto Sans KR', sans-serif",
-            color: '#FFFFFF'
+            color: '#FFFFFF', angle: 0,
+            useStroke: false, strokeColor: '#000000'
         };
         layers.push(newText);
         selectedLayer = newText;
+        showPropertyEditor();
+        updatePoster();
+    }
+
+    /* 2번 기능: 이모지 스티커 추가 */
+    function addEmojiSticker(emoji) {
+        const newEmoji = {
+            id: Date.now(),
+            type: 'text',
+            text: emoji,
+            x: 400, y: 600, size: 100,
+            font: "'Noto Sans KR', sans-serif",
+            color: '#FFFFFF', angle: 0,
+            useStroke: false, strokeColor: '#000000'
+        };
+        layers.push(newEmoji);
+        selectedLayer = newEmoji;
+        showPropertyEditor();
+        updatePoster();
+    }
+
+    /* 2번 기능: 기본 도형 레이어 추가 */
+    function addShapeLayer(shapeType) {
+        const newShape = {
+            id: Date.now(),
+            type: 'shape',
+            shape: shapeType,
+            x: 400, y: 600,
+            scale: 1.0,
+            width: shapeType === 'rect' ? 200 : 150,
+            height: 150,
+            color: '#ffcc00',
+            angle: 0
+        };
+        layers.push(newShape);
+        selectedLayer = newShape;
         showPropertyEditor();
         updatePoster();
     }
@@ -288,13 +389,9 @@
             img.onload = function() {
                 const newImg = {
                     id: Date.now(),
-                    type: 'image',
-                    img: img,
-                    x: 400, 
-                    y: 600,
-                    scale: 0.5, 
-                    width: img.width,
-                    height: img.height
+                    type: 'image', img: img,
+                    x: 400, y: 600, scale: 0.5, 
+                    width: img.width, height: img.height, angle: 0
                 };
                 layers.push(newImg);
                 selectedLayer = newImg;
@@ -306,11 +403,11 @@
         e.target.value = ''; 
     }
 
-    // --- 동적 속성 창 바인딩 ---
     function showPropertyEditor() {
         const editor = document.getElementById('propertyEditor');
         const textOpts = document.getElementById('textOptions');
         const imgOpts = document.getElementById('imageOptions');
+        const shapeColorGroup = document.getElementById('shapeColorGroup');
         
         if (!selectedLayer) {
             editor.style.display = 'none';
@@ -318,6 +415,9 @@
         }
         
         editor.style.display = 'block';
+        document.getElementById('propRotation').value = selectedLayer.angle;
+        document.getElementById('propRotationNumber').value = selectedLayer.angle;
+
         if (selectedLayer.type === 'text') {
             textOpts.style.display = 'block';
             imgOpts.style.display = 'none';
@@ -326,19 +426,62 @@
             document.getElementById('propTextFont').value = selectedLayer.font;
             document.getElementById('propTextSize').value = selectedLayer.size;
             document.getElementById('propTextColor').value = selectedLayer.color;
+            document.getElementById('propTextStroke').checked = selectedLayer.useStroke || false;
+            document.getElementById('propTextStrokeColor').value = selectedLayer.strokeColor || '#000000';
         } else {
             textOpts.style.display = 'none';
             imgOpts.style.display = 'block';
-            document.getElementById('propTitle').innerText = '🖼️ 사진 속성 편집';
+            if(selectedLayer.type === 'shape') {
+                document.getElementById('propTitle').innerText = '🔷 도형 속성 편집';
+                shapeColorGroup.style.display = 'block';
+                document.getElementById('propShapeColor').value = selectedLayer.color;
+            } else {
+                document.getElementById('propTitle').innerText = '🖼️ 사진 속성 편집';
+                shapeColorGroup.style.display = 'none';
+            }
         }
     }
 
     function onPropertyChange() {
-        if (!selectedLayer || selectedLayer.type !== 'text') return;
-        selectedLayer.text = document.getElementById('propTextContent').value;
-        selectedLayer.font = document.getElementById('propTextFont').value;
-        selectedLayer.size = parseInt(document.getElementById('propTextSize').value) || 20;
-        selectedLayer.color = document.getElementById('propTextColor').value;
+        if (!selectedLayer) return;
+        if (selectedLayer.type === 'text') {
+            selectedLayer.text = document.getElementById('propTextContent').value;
+            selectedLayer.font = document.getElementById('propTextFont').value;
+            selectedLayer.size = parseInt(document.getElementById('propTextSize').value) || 20;
+            selectedLayer.color = document.getElementById('propTextColor').value;
+            selectedLayer.useStroke = document.getElementById('propTextStroke').checked;
+            selectedLayer.strokeColor = document.getElementById('propTextStrokeColor').value;
+        } else if (selectedLayer.type === 'shape') {
+            selectedLayer.color = document.getElementById('propShapeColor').value;
+        }
+        updatePoster();
+    }
+
+    function onRotationSliderChange(val) {
+        if (!selectedLayer) return;
+        let angle = parseInt(val) || 0;
+        angle = (angle % 360 + 360) % 360;
+        selectedLayer.angle = angle;
+        document.getElementById('propRotation').value = angle;
+        document.getElementById('propRotationNumber').value = angle;
+        updatePoster();
+    }
+
+    /* 4번 기능: 레이어 순서 바꾸기 구현 */
+    function moveLayerOrder(direction) {
+        if (!selectedLayer) return;
+        const index = layers.findIndex(l => l.id === selectedLayer.id);
+        if (index === -1) return;
+
+        if (direction === 'forward') {
+            // 맨 앞으로 보내기 (배열의 가장 마지막으로 이동)
+            layers.splice(index, 1);
+            layers.push(selectedLayer);
+        } else if (direction === 'backward') {
+            // 맨 뒤로 보내기 (배열의 가장 앞으로 이동)
+            layers.splice(index, 1);
+            layers.unshift(selectedLayer);
+        }
         updatePoster();
     }
 
@@ -350,7 +493,8 @@
         updatePoster();
     }
 
-    // --- 인터랙티브 마우스 엔진 (충돌 연산 통합) ---
+    /* --- 마우스 인터랙션 엔진 --- */
+
     function initCanvasEvents() {
         canvas.addEventListener('mousedown', onStart);
         canvas.addEventListener('mousemove', onMove);
@@ -371,138 +515,236 @@
         };
     }
 
-    // 레이어 각각의 히트박스(영역) 구하기 유틸
-    function getLayerBounds(layer) {
-        if (layer.type === 'image') {
+    function getLayerLocalBounds(layer) {
+        if (layer.type === 'image' || layer.type === 'shape') {
             const w = layer.width * layer.scale;
             const h = layer.height * layer.scale;
-            return { x1: layer.x - w/2, x2: layer.x + w/2, y1: layer.y - h/2, y2: layer.y + h/2, w: w, h: h };
+            return { x1: -w/2, x2: w/2, y1: -h/2, y2: h/2, w: w, h: h };
         } else {
-            // 텍스트의 가상 바운딩 박스 계산 (줄바꿈 고려)
+            ctx.save();
             ctx.font = `bold ${layer.size}px ${layer.font}`;
             const lines = layer.text.split('\n');
             let maxW = 0;
             lines.forEach(l => { maxW = Math.max(maxW, ctx.measureText(l).width); });
             const h = lines.length * layer.size * 1.2;
-            return { x1: layer.x - maxW/2, x2: layer.x + maxW/2, y1: layer.y - layer.size, y2: layer.y + h - layer.size, w: maxW, h: h };
+            ctx.restore();
+            return { x1: -maxW/2, x2: maxW/2, y1: -layer.size, y2: h - layer.size, w: maxW, h: h };
         }
+    }
+
+    function toLocalCoords(worldX, worldY, centerX, centerY, angleDegrees) {
+        const rad = -angleDegrees * Math.PI / 180;
+        const dx = worldX - centerX;
+        const dy = worldY - centerY;
+        return {
+            x: dx * Math.cos(rad) - dy * Math.sin(rad),
+            y: dx * Math.sin(rad) + dy * Math.cos(rad)
+        };
     }
 
     function onStart(e) {
         if(e.touches) e.preventDefault();
-        const coords = getCanvasCoords(e);
-        
-        // 1. 선택 레이어 크기 조절 우측 하단 핸들 체크
+        const mouse = getCanvasCoords(e);
+
         if (selectedLayer) {
-            const b = getLayerBounds(selectedLayer);
-            if (coords.x >= b.x2 - HANDLE_SIZE && coords.x <= b.x2 + HANDLE_SIZE &&
-                coords.y >= b.y2 - HANDLE_SIZE && coords.y <= b.y2 + HANDLE_SIZE) {
+            const localB = getLayerLocalBounds(selectedLayer);
+            const localMouse = toLocalCoords(mouse.x, mouse.y, selectedLayer.x, selectedLayer.y, selectedLayer.angle);
+
+            const rotX = 0;
+            const rotY = localB.y1 - ROTATE_HANDLE_OFFSET;
+            if (Math.hypot(localMouse.x - rotX, localMouse.y - rotY) <= HANDLE_SIZE) {
+                isRotating = true;
+                initialAngle = selectedLayer.angle;
+                startMouseAngle = Math.atan2(mouse.y - selectedLayer.y, mouse.x - selectedLayer.x) * 180 / Math.PI;
+                return;
+            }
+
+            if (Math.hypot(localMouse.x - localB.x2, localMouse.y - localB.y2) <= HANDLE_SIZE) {
                 isResizing = true;
-                dragStartX = coords.x;
-                initialScaleOrSize = selectedLayer.type === 'image' ? selectedLayer.scale : selectedLayer.size;
+                dragOffsetX = localMouse.x;
+                initialScaleOrSize = selectedLayer.type === 'image' || selectedLayer.type === 'shape' ? selectedLayer.scale : selectedLayer.size;
                 return;
             }
         }
 
-        // 2. 몸통 클릭 감지 (역순 탐색으로 맨 위 레이어 우선 선택)
         let hit = false;
         for (let i = layers.length - 1; i >= 0; i--) {
             const layer = layers[i];
-            const b = getLayerBounds(layer);
-            
-            if (coords.x >= b.x1 && coords.x <= b.x2 && coords.y >= b.y1 && coords.y <= b.y2) {
+            const localB = getLayerLocalBounds(layer);
+            const localMouse = toLocalCoords(mouse.x, mouse.y, layer.x, layer.y, layer.angle);
+
+            if (localMouse.x >= localB.x1 && localMouse.x <= localB.x2 && 
+                localMouse.y >= localB.y1 && localMouse.y <= localB.y2) {
                 selectedLayer = layer;
                 isDragging = true;
-                dragStartX = coords.x - layer.x;
-                dragStartY = coords.y - layer.y;
+                dragOffsetX = localMouse.x;
+                dragOffsetY = localMouse.y;
                 hit = true;
                 break;
             }
         }
 
-        if (!hit && !isResizing) selectedLayer = null;
+        if (!hit && !isResizing && !isRotating) selectedLayer = null;
         showPropertyEditor();
         updatePoster();
     }
 
     function onMove(e) {
         if(e.touches) e.preventDefault();
-        const coords = getCanvasCoords(e);
+        const mouse = getCanvasCoords(e);
 
-        // 크기조절 커서 변경 안내
-        if (!isDragging && !isResizing && selectedLayer) {
-            const b = getLayerBounds(selectedLayer);
-            if (coords.x >= b.x2 - HANDLE_SIZE && coords.x <= b.x2 + HANDLE_SIZE &&
-                coords.y >= b.y2 - HANDLE_SIZE && coords.y <= b.y2 + HANDLE_SIZE) {
+        if (!isDragging && !isResizing && !isRotating && selectedLayer) {
+            const localB = getLayerLocalBounds(selectedLayer);
+            const localMouse = toLocalCoords(mouse.x, mouse.y, selectedLayer.x, selectedLayer.y, selectedLayer.angle);
+            
+            if (Math.hypot(localMouse.x - 0, localMouse.y - (localB.y1 - ROTATE_HANDLE_OFFSET)) <= HANDLE_SIZE) {
+                canvas.style.cursor = 'crosshair';
+            } else if (Math.hypot(localMouse.x - localB.x2, localMouse.y - localB.y2) <= HANDLE_SIZE) {
                 canvas.style.cursor = 'se-resize';
-            } else {
+            } else if (localMouse.x >= localB.x1 && localMouse.x <= localB.x2 && localMouse.y >= localB.y1 && localMouse.y <= localB.y2) {
                 canvas.style.cursor = 'move';
+            } else {
+                canvas.style.cursor = 'default';
             }
         }
 
-        if (isResizing && selectedLayer) {
-            const deltaX = coords.x - dragStartX;
-            if (selectedLayer.type === 'image') {
-                const newScale = initialScaleOrSize + (deltaX / (selectedLayer.width / 2));
-                selectedLayer.scale = Math.max(0.05, Math.min(2.0, newScale));
+        if (isRotating && selectedLayer) {
+            const currentMouseAngle = Math.atan2(mouse.y - selectedLayer.y, mouse.x - selectedLayer.x) * 180 / Math.PI;
+            const deltaAngle = currentMouseAngle - startMouseAngle;
+            let newAngle = Math.round(initialAngle + deltaAngle);
+            newAngle = (newAngle % 360 + 360) % 360;
+            selectedLayer.angle = newAngle;
+            document.getElementById('propRotation').value = newAngle;
+            document.getElementById('propRotationNumber').value = newAngle;
+            updatePoster();
+        } 
+        else if (isResizing && selectedLayer) {
+            const localMouse = toLocalCoords(mouse.x, mouse.y, selectedLayer.x, selectedLayer.y, selectedLayer.angle);
+            const ratio = localMouse.x / dragOffsetX;
+            
+            if (selectedLayer.type === 'image' || selectedLayer.type === 'shape') {
+                selectedLayer.scale = Math.max(0.05, Math.min(2.5, initialScaleOrSize * ratio));
             } else {
-                // 글자 크기도 마우스 드래그로 즉시 스케일링 가능!
-                const newSize = initialScaleOrSize + (deltaX * 0.3);
-                selectedLayer.size = Math.max(12, Math.min(150, Math.round(newSize)));
+                selectedLayer.size = Math.max(12, Math.min(150, Math.round(initialScaleOrSize * ratio)));
                 document.getElementById('propTextSize').value = selectedLayer.size;
             }
             updatePoster();
-        } else if (isDragging && selectedLayer) {
-            selectedLayer.x = coords.x - dragStartX;
-            selectedLayer.y = coords.y - dragStartY;
+        } 
+        else if (isDragging && selectedLayer) {
+            const rad = selectedLayer.angle * Math.PI / 180;
+            const worldOffsetX = dragOffsetX * Math.cos(rad) - dragOffsetY * Math.sin(rad);
+            const worldOffsetY = dragOffsetX * Math.sin(rad) + dragOffsetY * Math.cos(rad);
+            
+            selectedLayer.x = mouse.x - worldOffsetX;
+            selectedLayer.y = mouse.y - worldOffsetY;
             updatePoster();
         }
     }
 
-    function onEnd() { isDragging = false; isResizing = false; }
+    function onEnd() { 
+        isDragging = false; 
+        isResizing = false; 
+        isRotating = false; 
+        canvas.style.cursor = 'default'; 
+    }
 
-    // --- 그래픽 최종 드로잉 렌더 룸 ---
+    /* --- 그래픽 최종 렌더링 룸 --- */
+
     function updatePoster() {
         if (!currentBgImg.src) return;
         const opacity = document.getElementById('overlayOpacity').value;
 
-        // 1. 도화지 초기화 및 배경
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(currentBgImg, 0, 0, canvas.width, canvas.height);
         ctx.fillStyle = `rgba(0, 0, 0, ${opacity})`; 
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // 2. 모든 레이어 순서대로 순회 그리기
         layers.forEach(layer => {
             ctx.save();
-            ctx.textAlign = "center";
-            ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
-            ctx.shadowBlur = 10;
+            
+            ctx.translate(layer.x, layer.y);
+            ctx.rotate(layer.angle * Math.PI / 180);
+            
+            ctx.shadowColor = "rgba(0, 0, 0, 0.6)";
+            ctx.shadowBlur = layer.type === 'shape' ? 5 : 10;
 
             if (layer.type === 'image') {
                 const w = layer.width * layer.scale;
                 const h = layer.height * layer.scale;
-                ctx.drawImage(layer.img, layer.x - w/2, layer.y - h/2, w, h);
-            } else {
+                ctx.drawImage(layer.img, -w/2, -h/2, w, h);
+            } 
+            else if (layer.type === 'shape') {
+                // 도형 그리기 엔진
+                ctx.fillStyle = layer.color;
+                const w = layer.width * layer.scale;
+                const h = layer.height * layer.scale;
+                
+                if(layer.shape === 'rect') {
+                    ctx.fillRect(-w/2, -h/2, w, h);
+                } else if(layer.shape === 'circle') {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, w/2, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if(layer.shape === 'bubble') {
+                    // 말풍선 그리기
+                    ctx.beginPath();
+                    ctx.roundRect(-w/2, -h/2, w, h * 0.8, 15);
+                    ctx.moveTo(-15, h*0.3);
+                    ctx.lineTo(0, h*0.5);
+                    ctx.lineTo(15, h*0.3);
+                    ctx.fill();
+                }
+            }
+            else {
+                // 텍스트 및 이모지 그리기
+                ctx.textAlign = "center";
                 ctx.fillStyle = layer.color;
                 ctx.font = `bold ${layer.size}px ${layer.font}`;
+                
+                // 테두리 설정 (3번 기능 적용)
+                if(layer.useStroke) {
+                    ctx.strokeStyle = layer.strokeColor || '#000000';
+                    ctx.lineWidth = Math.max(2, layer.size * 0.1); // 글자 크기에 비례한 두께
+                    ctx.lineJoin = 'round';
+                }
+
                 const lines = layer.text.split('\n');
                 lines.forEach((line, index) => {
-                    ctx.fillText(line, layer.x, layer.y + (index * layer.size * 1.2));
+                    const yPos = (index * layer.size * 1.2);
+                    if(layer.useStroke) {
+                        ctx.strokeText(line, 0, yPos);
+                    }
+                    ctx.fillText(line, 0, yPos);
                 });
             }
 
-            // 선택된 객체 하이라이트 가이드 및 조절 핸들 점 찍기
+            // 가이드라인 및 핸들
             if (selectedLayer && selectedLayer.id === layer.id) {
-                const b = getLayerBounds(layer);
+                const localB = getLayerLocalBounds(layer);
+                
+                ctx.shadowBlur = 0; 
                 ctx.strokeStyle = '#3182ce';
                 ctx.lineWidth = 3;
-                ctx.shadowBlur = 0; // 바운딩 박스엔 그림자 해제
-                ctx.strokeRect(b.x1, b.y1, b.w, b.h);
-
+                ctx.strokeRect(localB.x1, localB.y1, localB.w, localB.h);
+                
                 ctx.fillStyle = '#3182ce';
                 ctx.beginPath();
-                ctx.arc(b.x2, b.y2, HANDLE_SIZE/2, 0, Math.PI * 2);
+                ctx.arc(localB.x2, localB.y2, HANDLE_SIZE/2, 0, Math.PI * 2);
+                ctx.fill();
+
+                const rotX = 0;
+                const rotY = localB.y1 - ROTATE_HANDLE_OFFSET;
+                
+                ctx.strokeStyle = '#2ecc71';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(0, localB.y1);
+                ctx.lineTo(rotX, rotY);
+                ctx.stroke();
+
+                ctx.fillStyle = '#2ecc71';
+                ctx.beginPath();
+                ctx.arc(rotX, rotY, HANDLE_SIZE/2, 0, Math.PI * 2);
                 ctx.fill();
             }
             ctx.restore();
@@ -511,10 +753,9 @@
 
     function downloadPoster() {
         const prevSelected = selectedLayer;
-        selectedSticker = null;
-        selectedLayer = null; // 가이드라인 숨기기
+        selectedLayer = null; 
         updatePoster();
-
+        
         setTimeout(() => {
             const link = document.createElement('a');
             link.download = 'perfect-canvas-poster.png';
@@ -525,6 +766,5 @@
         }, 50);
     }
 </script>
-
 </body>
 </html>
