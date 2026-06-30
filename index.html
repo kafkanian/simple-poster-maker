@@ -6,7 +6,8 @@
     <title>하이퍼 캔버스 포스터 스튜디오</title>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Aggro&family=Black+Han+Sans&family=Cafe24Anemone&family=Do+Hyeon&family=East+Sea+Dokdo&family=Gamja+Flower&family=Gowun+Batang:wght@700&family=Jua&family=Nanum+Square&family=Noto+Sans+KR:wght@500;700&display=swap');
+        /* 💡 안정성이 검증된 구글 한글 폰트 라인업 */
+        @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Jua&family=Gamja+Flower&family=Poor+Story&family=Cute+Font&family=Yeon+Sung&family=East+Sea+Dokdo&family=Gowun+Batang:wght@700&family=Nanum+Gothic:wght@800&family=Noto+Sans+KR:wght@900&display=swap');
 
         body {
             font-family: 'Noto Sans KR', sans-serif;
@@ -98,12 +99,17 @@
         
         .sticker-preset-btn {
             padding: 8px;
-            font-size: 20px;
+            font-size: 22px;
             background: white;
             border: 1px solid #cbd5e0;
             border-radius: 8px;
             cursor: pointer;
             transition: transform 0.1s;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .sticker-preset-btn:hover { transform: scale(1.1); background: #f7fafc; }
 
@@ -145,27 +151,32 @@
 <body>
 
 <div class="container">
-    <!-- 컨트롤 패널 (좌측) -->
     <div class="control-panel">
         <h2>🎨 무제한 캔버스 스튜디오</h2>
         
-        <!-- 배경 이미지 및 색상 섹션 -->
         <div class="section-box">
             <h3>🖼️ 1. 배경 설정</h3>
             <div class="input-group">
-                <label>사진 배경 고르기</label>
+                <label>사진 배경 고르기 (12가지 테마)</label>
                 <select id="theme" onchange="handleThemeChange()">
-                    <option value="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=800&q=80">🎉 파티 / 축제</option>
-                    <option value="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80">🛍️ 세일 / 할인</option>
-                    <option value="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80">☕ 카페 / 디저트</option>
-                    <option value="https://images.unsplash.com/photo-1557683316-973673baf926?w=800&q=80">🎨 그라데이션</option>
+                    <option value="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=800&q=80">🎉 파티 / 대축제</option>
+                    <option value="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80">🛍️ 프리마켓 / 세일</option>
+                    <option value="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80">☕ 카페 / 먹거리</option>
+                    <option value="https://images.unsplash.com/photo-1557683316-973673baf926?w=800&q=80">🎨 그라데이션 예술</option>
+                    <option value="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80">🏖️ 시원한 여름 바다</option>
+                    <option value="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80">🌳 초록초록 자연 환경</option>
+                    <option value="https://images.unsplash.com/photo-1531685222403-f928502d2b60?w=800&q=80">📻 레트로 / 옛날 감성</option>
+                    <option value="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80">🚀 신비한 과학 우주</option>
+                    <option value="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=800&q=80">🧱 깔끔한 벽돌 배경</option>
+                    <option value="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80">✨ 반짝반짝 네온 클럽</option>
+                    <option value="https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&q=80">🎄 따뜻한 크리스마스</option>
+                    <option value="https://images.unsplash.com/photo-1508349679140-346a14c02ba9?w=800&q=80">🎃 으스스 할로윈 파티</option>
                     <option value="custom">[내 이미지 직접 업로드 ↑]</option>
                 </select>
                 <label for="imageLoader" class="file-upload-btn" id="uploadBtnLabel" style="display:none;">📁 배경 사진 선택</label>
                 <input type="file" id="imageLoader" accept="image/*" style="display:none;" onchange="handleFileUpload(event)">
             </div>
             
-            <!-- 단색 배경 기능 추가됨 -->
             <div class="input-group" style="margin-top: 12px; border-top: 1px dashed #cbd5e0; padding-top: 10px;">
                 <label>🎨 배경을 단색으로 채우기</label>
                 <div style="display: flex; gap: 10px; align-items: center; margin-top: 4px;">
@@ -180,7 +191,6 @@
             </div>
         </div>
 
-        <!-- 요소 추가 섹션 -->
         <div class="section-box">
             <h3>➕ 요소 추가하기</h3>
             <div class="row-group">
@@ -190,7 +200,7 @@
             </div>
             
             <div class="input-group" style="margin-top: 10px;">
-                <label>⭐ 귀여운 스티커 쏙 넣기</label>
+                <label>⭐ 귀여운 스티커 쏙 넣기 (12가지 종류)</label>
                 <div class="row-group" style="flex-wrap: wrap; gap: 6px; margin-top: 4px;">
                     <button class="sticker-preset-btn" onclick="addEmojiSticker('❤️')">❤️</button>
                     <button class="sticker-preset-btn" onclick="addEmojiSticker('✨')">✨</button>
@@ -198,6 +208,12 @@
                     <button class="sticker-preset-btn" onclick="addEmojiSticker('☕')">☕</button>
                     <button class="sticker-preset-btn" onclick="addEmojiSticker('🛍️')">🛍️</button>
                     <button class="sticker-preset-btn" onclick="addEmojiSticker('🔥')">🔥</button>
+                    <button class="sticker-preset-btn" onclick="addEmojiSticker('📢')">📢</button>
+                    <button class="sticker-preset-btn" onclick="addEmojiSticker('🥇')">🥇</button>
+                    <button class="sticker-preset-btn" onclick="addEmojiSticker('💡')">💡</button>
+                    <button class="sticker-preset-btn" onclick="addEmojiSticker('🍀')">🍀</button>
+                    <button class="sticker-preset-btn" onclick="addEmojiSticker('🐱')">🐱</button>
+                    <button class="sticker-preset-btn" onclick="addEmojiSticker('🍏')">🍏</button>
                 </div>
             </div>
 
@@ -211,7 +227,6 @@
             </div>
         </div>
 
-        <!-- 속성 편집 섹션 -->
         <div class="section-box" id="propertyEditor" style="display:none;">
             <h3 id="propTitle">📝 선택한 요소 편집</h3>
             
@@ -226,18 +241,19 @@
                     <textarea id="propTextContent" rows="3" oninput="onPropertyChange()"></textarea>
                 </div>
                 <div class="input-group">
-                    <label>폰트 스타일</label>
+                    <label>폰트 스타일 (11가지 서체)</label>
                     <select id="propTextFont" onchange="onPropertyChange()">
-                        <option value="'Black Han Sans', sans-serif">배민 한나체 (두꺼움)</option>
-                        <option value="'Do Hyeon', sans-serif">배민 도현체 (꽉참)</option>
-                        <option value="'Jua', sans-serif">배민 주아체 (둥글둥글)</option>
-                        <option value="'Noto Sans KR', sans-serif">본고딕 (깔끔·기본)</option>
-                        <option value="'Gowun Batang', serif">고운바탕 (부드러운 명조)</option>
-                        <option value="'Yeon Sung', cursive">연성체 (자연스러운 붓글씨)</option>
-                        <option value="'East Sea Dokdo', cursive">독도체 (거친 거인 느낌)</option>
-                        <option value="'Nanum Square', sans-serif">나눔스퀘어 (바른 고딕)</option>
-                        <option value="'Cafe24Anemone', cursive">아네모네체 (손글씨 감성)</option>
-                        <option value="'Aggro', sans-serif">샌드박스 어그로체 (주목도 최고)</option>
+                        <option value="Black Han Sans">배민 한나체 (두껍고 강력함)</option>
+                        <option value="Do Hyeon">배민 도현체 (네모네모 꽉참)</option>
+                        <option value="Jua">배민 주아체 (둥글둥글 귀여움)</option>
+                        <option value="Gamja Flower">감자꽃체 (아기자기 동화책)</option>
+                        <option value="Poor Story">푸른밤 푸어스토리 (정감있는 손글씨)</option>
+                        <option value="Cute Font">큐트폰트 (동글동글 아기자기)</option>
+                        <option value="Yeon Sung">연성체 (전통적인 붓글씨)</option>
+                        <option value="East Sea Dokdo">독도체 (거친 개성파 글씨)</option>
+                        <option value="Gowun Batang">고운바탕 (단정하고 우아함)</option>
+                        <option value="Nanum Gothic">나눔고딕 (꽉 찬 고딕 강조형)</option>
+                        <option value="Noto Sans KR">본고딕 (가장 기본적이고 깔끔)</option>
                     </select>
                 </div>
                 <div class="row-group">
@@ -277,10 +293,9 @@
         </div>
     </div>
 
-    <!-- 프리뷰 패널 (우측) -->
     <div class="preview-panel">
-        <div style="font-size:12px; font-weight: bold; color: #4a5568; margin-bottom: 15px; align-self: flex-start;">
-            💡 요소 변형 꿀팁: 몸통 드래그(=이동) / 우하단 파란 점(=크기) / 상단 중앙 초록 점(=회전)
+        <div style="font-size:12px; font-weight: bold; color: #2b6cb0; margin-bottom: 15px; align-self: flex-start; background: #ebf8ff; padding: 6px 12px; border-radius: 6px; width: 97%;">
+            💡 초등 꿀팁: 글자를 <span style="color:#e53e3e;">두 번 빠르게 톡톡(더블클릭)</span> 누르면 글자 내용을 바로 바꿀 수 있어요!
         </div>
         <canvas id="posterCanvas" width="800" height="1200"></canvas>
         <button class="main-btn" onclick="downloadPoster()">포스터 완성 및 다운로드 💾</button>
@@ -289,8 +304,8 @@
 
 <script>
     let currentBgImg = new Image();
-    let useColorBg = false;      // 현재 단색 배경 모드인지 여부
-    let bgColorValue = '#ffffff'; // 배경 색상 값
+    let useColorBg = false;      
+    let bgColorValue = '#ffffff'; 
     let layers = [];         
     let selectedLayer = null; 
     
@@ -311,14 +326,23 @@
 
     window.onload = function() {
         loadBgImage(document.getElementById('theme').value);
-        layers.push({ id: 1, type: 'text', text: '여름맞이 대축제', x: 400, y: 300, size: 75, font: "'Black Han Sans', sans-serif", color: '#FFFFFF', angle: 0, useStroke: true, strokeColor: '#000000' });
-        layers.push({ id: 2, type: 'text', text: '시원한 음료 1+1 이벤트\n지금 매장으로 방문하세요!', x: 400, y: 950, size: 38, font: "'Noto Sans KR', sans-serif", color: '#FFD700', angle: 0, useStroke: true, strokeColor: '#000000' });
+        layers.push({ id: 1, type: 'text', text: '여름맞이 대축제', x: 400, y: 300, size: 75, font: "Black Han Sans", color: '#FFFFFF', angle: 0, useStroke: true, strokeColor: '#000000' });
+        layers.push({ id: 2, type: 'text', text: '시원한 음료 1+1 이벤트\n지금 매장으로 방문하세요!', x: 400, y: 950, size: 38, font: "Noto Sans KR", color: '#FFD700', angle: 0, useStroke: true, strokeColor: '#000000' });
         initCanvasEvents(); 
+        
+        // 💡 [핵심 버그 해결] 구글 웹폰트가 웹 브라우저 메모리에 완벽히 들어왔을 때 캔버스를 갱신해주는 시스템
+        if (document.fonts) {
+            document.fonts.ready.then(function() {
+                updatePoster();
+            });
+        } else {
+            setTimeout(updatePoster, 400);
+        }
     };
 
     function handleThemeChange() {
-        useColorBg = false; // 사진을 고르면 단색 배경 모드 해제
-        document.getElementById('filterGroup').style.display = 'flex'; // 어둡기 필터 다시 표시
+        useColorBg = false; 
+        document.getElementById('filterGroup').style.display = 'flex'; 
         
         const themeSelect = document.getElementById('theme');
         const uploadLabel = document.getElementById('uploadBtnLabel');
@@ -330,11 +354,10 @@
         }
     }
 
-    /* 단색 배경 색상 변경 처리 함수 */
     function handleBgColorChange(color) {
-        useColorBg = true; // 단색 배경 모드 활성화
+        useColorBg = true; 
         bgColorValue = color;
-        document.getElementById('filterGroup').style.display = 'none'; // 단색에는 어둡기 필터가 무의미하므로 숨김
+        document.getElementById('filterGroup').style.display = 'none'; 
         updatePoster();
     }
 
@@ -362,10 +385,10 @@
             id: Date.now(),
             type: 'text',
             text: '새로운 홍보 문구',
-            x: 400, y: 600, size: 40,
-            font: "'Noto Sans KR', sans-serif",
+            x: 400, y: 600, size: 45,
+            font: "Noto Sans KR",
             color: '#FFFFFF', angle: 0,
-            useStroke: false, strokeColor: '#000000'
+            useStroke: true, strokeColor: '#000000'
         };
         layers.push(newText);
         selectedLayer = newText;
@@ -379,7 +402,7 @@
             type: 'text',
             text: emoji,
             x: 400, y: 600, size: 100,
-            font: "'Noto Sans KR', sans-serif",
+            font: "Noto Sans KR",
             color: '#FFFFFF', angle: 0,
             useStroke: false, strokeColor: '#000000'
         };
@@ -482,7 +505,15 @@
         } else if (selectedLayer.type === 'shape') {
             selectedLayer.color = document.getElementById('propShapeColor').value;
         }
+        
+        // 💡 사용자가 폰트나 속성을 바꿀 때 강제로 화면을 재배치하고 가동시킵니다.
+        forceFontReloadAndDraw();
+    }
+
+    // 💡 폰트가 즉시 반영되도록 강제 지연 업데이트 함수 추가
+    function forceFontReloadAndDraw() {
         updatePoster();
+        setTimeout(updatePoster, 50); 
     }
 
     function onRotationSliderChange(val) {
@@ -525,6 +556,8 @@
         canvas.addEventListener('mousemove', onMove);
         canvas.addEventListener('mouseup', onEnd);
         canvas.addEventListener('mouseleave', onEnd);
+        canvas.addEventListener('dblclick', onDoubleClick);
+
         canvas.addEventListener('touchstart', onStart, { passive: false });
         canvas.addEventListener('touchmove', onMove, { passive: false });
         canvas.addEventListener('touchend', onEnd);
@@ -547,11 +580,11 @@
             return { x1: -w/2, x2: w/2, y1: -h/2, y2: h/2, w: w, h: h };
         } else {
             ctx.save();
-            ctx.font = `bold ${layer.size}px ${layer.font}`;
+            ctx.font = `bold ${layer.size}px "${layer.font}", sans-serif`;
             const lines = layer.text.split('\n');
             let maxW = 0;
             lines.forEach(l => { maxW = Math.max(maxW, ctx.measureText(l).width); });
-            const h = lines.length * layer.size * 1.2;
+            const h = lines.length * layer.size * 1.25;
             ctx.restore();
             return { x1: -maxW/2, x2: maxW/2, y1: -layer.size, y2: h - layer.size, w: maxW, h: h };
         }
@@ -565,6 +598,34 @@
             x: dx * Math.cos(rad) - dy * Math.sin(rad),
             y: dx * Math.sin(rad) + dy * Math.cos(rad)
         };
+    }
+
+    function onDoubleClick(e) {
+        const mouse = getCanvasCoords(e);
+        
+        for (let i = layers.length - 1; i >= 0; i--) {
+            const layer = layers[i];
+            if (layer.type !== 'text') continue; 
+            
+            const localB = getLayerLocalBounds(layer);
+            const localMouse = toLocalCoords(mouse.x, mouse.y, layer.x, layer.y, layer.angle);
+
+            if (localMouse.x >= localB.x1 && localMouse.x <= localB.x2 && 
+                localMouse.y >= localB.y1 && localMouse.y <= localB.y2) {
+                
+                selectedLayer = layer;
+                showPropertyEditor();
+
+                const newText = prompt("✏️ 글자 내용을 멋지게 수정해 보세요!\n(줄바꿈 상태를 그대로 유지하려면 칸을 잘 맞춰서 입력해 주시면 좋습니다.)", layer.text);
+                
+                if (newText !== null) { 
+                    layer.text = newText;
+                    document.getElementById('propTextContent').value = newText; 
+                    forceFontReloadAndDraw();
+                }
+                break;
+            }
+        }
     }
 
     function onStart(e) {
@@ -673,12 +734,11 @@
         canvas.style.cursor = 'default'; 
     }
 
-    /* --- 그래픽 최종 렌더링 룸 --- */
+    /* --- 그래픽 최종 렌더링 엔진 --- */
 
     function updatePoster() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // 1. 배경 처리 (단색 모드 vs 사진 모드 분기)
         if (useColorBg) {
             ctx.fillStyle = bgColorValue;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -690,7 +750,6 @@
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
-        // 2. 레이어 렌더링
         layers.forEach(layer => {
             ctx.save();
             
@@ -728,17 +787,19 @@
             else {
                 ctx.textAlign = "center";
                 ctx.fillStyle = layer.color;
-                ctx.font = `bold ${layer.size}px ${layer.font}`;
+                
+                // 💡 따옴표 구조를 고쳐 Canvas 브라우저 엔진이 정확한 다운로드 폰트명을 인식하게 빌드
+                ctx.font = `bold ${layer.size}px "${layer.font}", sans-serif`;
                 
                 if(layer.useStroke) {
                     ctx.strokeStyle = layer.strokeColor || '#000000';
-                    ctx.lineWidth = Math.max(2, layer.size * 0.1); 
+                    ctx.lineWidth = Math.max(2, layer.size * 0.12); 
                     ctx.lineJoin = 'round';
                 }
 
                 const lines = layer.text.split('\n');
                 lines.forEach((line, index) => {
-                    const yPos = (index * layer.size * 1.2);
+                    const yPos = (index * layer.size * 1.25);
                     if(layer.useStroke) {
                         ctx.strokeText(line, 0, yPos);
                     }
@@ -785,7 +846,7 @@
         
         setTimeout(() => {
             const link = document.createElement('a');
-            link.download = 'perfect-canvas-poster.png';
+            link.download = 'canvas-poster-fixed.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
             selectedLayer = prevSelected;
